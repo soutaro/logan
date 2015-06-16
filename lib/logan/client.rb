@@ -98,6 +98,18 @@ module Logan
       person
     end
 
+    def groups(id = nil)
+      if id
+        response = self.class.get "/groups/#{id}.json"
+        group = Logan::Group.new response
+        group.json_raw = response.body
+        group
+      else
+        response = self.class.get "/groups.json"
+        handle_response(response, Proc.new {|h| Logan::Group.new(h) })
+      end
+    end
+
     private
       def all_projects
         response = self.class.get '/projects.json'
